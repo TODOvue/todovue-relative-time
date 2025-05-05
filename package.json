@@ -1,0 +1,59 @@
+{
+  "name": "@todovue/tv-relative-time",
+  "private": false,
+  "author": "Cristhian Daza",
+  "description": "Component to show relative time in a human-readable format.",
+  "license": "MIT",
+  "version": "0.0.0",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TODOvue/todovue-relative-time.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TODOvue/todovue-relative-time/issues"
+  },
+  "keywords": [
+    "todovue",
+    "front-end",
+    "web",
+    "vue",
+    "vuejs",
+    "vue-js",
+    "vue3",
+    "relative",
+    "time"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/todovue-relative-time.es.js",
+      "require": "./dist/todovue-relative-time.cjs.js"
+    }
+  },
+  "main": "dist/todovue-relative-time.cjs.js",
+  "module": "dist/todovue-relative-time.es.js",
+  "types": "dist/todovue-relative-time.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:demo": "cp README.md public/ && VITE_BUILD_TARGET=demo vite build"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.21"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "sass": "^1.85.0",
+    "vite": "^5.2.0",
+    "vite-plugin-css-injected-by-js": "^3.5.2",
+    "vite-plugin-dts": "^4.5.0"
+  }
+}
