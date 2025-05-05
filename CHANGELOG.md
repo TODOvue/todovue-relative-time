@@ -2,5 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+This project adheres to [Semantic Versioning](https://semver.org).
+
+---
+
+## [1.0.0] - 2025-05-05
+
+### ✨ Features
+- Fully functional `<TvRelativeTime />` component.
+- Live update support with customizable `updateInterval`.
+- Compact mode via `compact` prop: displays formats like `2d`, `3w`, `1mo`, `1a`.
+- Optional absolute date display using `showFullDate` prop.
+- Tooltip support with accessible `<time>` tag and `aria-label`.
+- Human-friendly phrasing for relative dates like `yesterday`, `last week` or `this Wednesday`.
+- Detailed breakdown of time differences in years, months, weeks, and days (limited to two units for UI clarity).
+- No external dependencies.
+- Includes `useRelativeTime()` composable for shared logic.
+
+### ✅ Accessibility
+- Semantic `<time>` element with `datetime`, `title`, and `aria-label`.
+
+---
+
+[1.0.0]: https://github.com/TODOvue/todovue-relative-time/pull/1/files
