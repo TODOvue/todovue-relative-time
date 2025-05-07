@@ -2,6 +2,9 @@ import Default from './demos/default.vue?raw';
 import UpdateInterval from './demos/updateInterval.vue?raw';
 import Compact from './demos/compact.vue?raw';
 import ShowFullDate from "./demos/showFullDate.vue?raw";
+import Spanish from './demos/spanish.vue?raw'
+import French from './demos/french.vue?raw'
+import Portuguese from './demos/portuguese.vue?raw'
 
 export const demos = [
   {
@@ -43,5 +46,40 @@ export const demos = [
     },
     html: ShowFullDate,
   },
+  {
+    id: 5,
+    title: "TvRelativeTime Español",
+    description: "Muestra una fecha pasada en español con `showFullDate` activado.",
+    propsData: {
+      date: '2022-09-10T12:00:00Z',
+      lang: 'es',
+      showFullDate: true
+    },
+    html: Spanish
+  },
+  {
+    id: 6,
+    title: "TvRelativeTime Français",
+    description: "Affiche une date future en français, avec la date complète visible.",
+    propsData: {
+      date: '2026-04-25T15:00:00Z',
+      lang: 'fr',
+      compact: false,
+      showFullDate: true
+    },
+    html: French
+  },
+  {
+    id: 7,
+    title: "TvRelativeTime Português",
+    description: "Exibe uma data passada em português, no formato compacto com data completa.",
+    propsData: {
+      date: '2023-01-01T00:00:00Z',
+      lang: 'pt',
+      compact: true,
+      showFullDate: true
+    },
+    html: Portuguese
+  }
 ];
 
