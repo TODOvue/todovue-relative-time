@@ -38,7 +38,7 @@ export const demos = [
     title: "TvRelativeTime Show Full Date",
     description: "Displays the relative time along with the exact full date as a tooltip or adjacent text.",
     propsData: {
-      date: '2025-05-05T00:00:00Z',
+      date: '2027-09-15T01:02:00Z',
       showFullDate: true,
     },
     html: ShowFullDate,

@@ -10,5 +10,5 @@ import { ref } from 'vue'
 
 import TvRelativeTime from "@todovue/tv-relative-time";
 
-const date = ref('2025-05-05T00:00:00Z')
+const date = ref('2027-09-15T00:00:00Z')
 </script>
