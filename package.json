@@ -2,16 +2,16 @@
   "name": "@todovue/tv-relative-time",
   "private": false,
   "author": "Cristhian Daza",
-  "description": "Component to show relative time in a human-readable format.",
+  "description": "A minimal and customizable Vue 3 component to display human-readable relative time with live updates and compact formats.",
   "license": "MIT",
   "version": "1.0.0",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TODOvue/todovue-relative-time.git"
+    "url": "https://github.com/TODOvue/tv-relative-time.git"
   },
   "bugs": {
-    "url": "https://github.com/TODOvue/todovue-relative-time/issues"
+    "url": "https://github.com/TODOvue/tv-relative-time/issues"
   },
   "keywords": [
     "todovue",
@@ -26,13 +26,13 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/todovue-relative-time.es.js",
-      "require": "./dist/todovue-relative-time.cjs.js"
+      "import": "./dist/tv-relative-time.es.js",
+      "require": "./dist/tv-relative-time.cjs.js"
     }
   },
-  "main": "dist/todovue-relative-time.cjs.js",
-  "module": "dist/todovue-relative-time.es.js",
-  "types": "dist/todovue-relative-time.d.ts",
+  "main": "dist/tv-relative-time.cjs.js",
+  "module": "dist/tv-relative-time.es.js",
+  "types": "dist/tv-relative-time.d.ts",
   "files": [
     "dist",
     "LICENSE",

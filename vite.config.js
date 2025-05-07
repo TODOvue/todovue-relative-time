@@ -22,7 +22,7 @@ export default defineConfig({
       lib: {
         entry: "src/components/TvRelativeTime.vue",
         name: "TvRelativeTime",
-        fileName: format => `todovue-relative-time.${format}.js`,
+        fileName: format => `tv-relative-time.${format}.js`,
         formats: ["es", "cjs"]
       },
       rollupOptions: {
