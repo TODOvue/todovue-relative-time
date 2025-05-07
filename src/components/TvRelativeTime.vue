@@ -31,7 +31,7 @@ let intervalId = null
 
 const updateTime = () => {
   if (!props.date) return
-  timeInfo.value = getRelativeTime(props.date, false, props.compact)
+  timeInfo.value = getRelativeTime(props.date, false, props.compact, props.lang)
 }
 
 const displayText = computed(() => {
@@ -49,9 +49,10 @@ onBeforeUnmount(() => {
   clearInterval(intervalId)
 })
 
-watch(() => props.date, () => {
-  updateTime()
-})
+watch(() => props.date, updateTime)
+watch(() => props.lang, updateTime)
+watch(() => props.compact, updateTime)
+watch(() => props.showFullDate, updateTime)
 </script>
 
 <template>

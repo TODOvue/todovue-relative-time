@@ -1,15 +1,15 @@
 import relativeTimeLocales from '../locales/relativeTime.js'
 
-const useRelativeTime = (lang = 'en') => {
-  const t = relativeTimeLocales[lang] || relativeTimeLocales.en
-  
-  const getRelativeTime = (dateString, isTableQuantity = false, compact = false) => {
-    if (!dateString) return { text: isTableQuantity ? '-' : t.noDate, tooltip: '' }
+const useRelativeTime = () => {
+  const getRelativeTime = (dateString, isTableQuantity = false, compact = false, lang = 'en') => {
+    const t = relativeTimeLocales[lang] || relativeTimeLocales.en
     
     const date = new Date(dateString)
     const now = new Date()
     
-    const fullDate = new Intl.DateTimeFormat(lang === 'es' ? 'es-CO' : 'en-US', {
+    if (!dateString) return { text: isTableQuantity ? '-' : t.noDate, tooltip: '' }
+    
+    const fullDate = new Intl.DateTimeFormat(lang, {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
@@ -20,16 +20,19 @@ const useRelativeTime = (lang = 'en') => {
     const diffInDays = Math.floor(diffInSeconds / 86400)
     const sameDay = date.toDateString() === now.toDateString()
     
-    const getDayName = (d) =>
-      new Intl.DateTimeFormat(lang === 'es' ? 'es-CO' : 'en-US', { weekday: 'long' }).format(d)
+    const getDayName = (d) => new Intl.DateTimeFormat(lang, { weekday: 'long' }).format(d)
     
-    const formatUnit = (val, unit) => {
-      const word = val === 1 ? t[unit] : t[unit + 's']
-      return `${val} ${word}`
-    }
+    const formatUnit = (val, unit) => `${val} ${val === 1 ? t[unit] : t[unit + 's']}`
     
     const formatCompact = (val, unit) => {
-      const map = { [t.minute]: 'm', [t.hour]: 'h', [t.day]: 'd', [t.week]: 'w', [t.month]: 'mo', [t.year]: 'y' }
+      const map = {
+        [t.minute]: 'm',
+        [t.hour]: 'h',
+        [t.day]: 'd',
+        [t.week]: 'w',
+        [t.month]: 'mo',
+        [t.year]: 'y'
+      }
       return `${val}${map[unit] || ''}`
     }
     
@@ -88,10 +91,7 @@ const useRelativeTime = (lang = 'en') => {
     if (diffInSeconds > 0) {
       if (diffInDays === 1) return { text: compact ? '1d' : t.tomorrow, tooltip: fullDate }
       if (diffInDays === 2) return { text: compact ? '2d' : `${t.in} 2 ${t.days}`, tooltip: fullDate }
-      
-      if (diffInDays < 7)
-        return { text: compact ? `${diffInDays}d` : `${t.next} ${getDayName(date)}`, tooltip: fullDate }
-      
+      if (diffInDays < 7) return { text: compact ? `${diffInDays}d` : `${t.next} ${getDayName(date)}`, tooltip: fullDate }
       if (diffInDays < 14) return { text: compact ? '1w' : t.nextWeek, tooltip: fullDate }
       
       if (diffInDays < 60) {
@@ -112,14 +112,9 @@ const useRelativeTime = (lang = 'en') => {
     } else {
       const absDays = Math.abs(diffInDays)
       if (absDays === 1) return { text: compact ? '1d' : t.yesterday, tooltip: fullDate }
-      
       if (absDays === 2) return { text: compact ? '2d' : `${t.ago} 2 ${t.days}`, tooltip: fullDate }
-      
-      if (absDays < 7)
-        return { text: compact ? `${absDays}d` : `${t.past} ${getDayName(date)}`, tooltip: fullDate }
-      
-      if (absDays < 14)
-        return { text: compact ? '1w' : t.lastWeek, tooltip: fullDate }
+      if (absDays < 7) return { text: compact ? `${absDays}d` : `${t.past} ${getDayName(date)}`, tooltip: fullDate }
+      if (absDays < 14) return { text: compact ? '1w' : t.lastWeek, tooltip: fullDate }
       
       if (absDays < 60) {
         const weeks = Math.round(absDays / 7)
