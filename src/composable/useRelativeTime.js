@@ -7,7 +7,8 @@ const useRelativeTime = () => {
     const fullDate = new Intl.DateTimeFormat('es-CO', {
       day: 'numeric',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
+      timeZone: 'UTC'
     }).format(date)
     
     const diffInSeconds = Math.floor((date - now) / 1000)

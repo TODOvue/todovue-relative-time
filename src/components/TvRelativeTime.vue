@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import useRelativeTime from '../composable/useRelativeTime.js'
 
 const props = defineProps({
@@ -43,6 +43,10 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   clearInterval(intervalId)
+})
+
+watch(() => props.date, () => {
+  updateTime()
 })
 </script>
 
