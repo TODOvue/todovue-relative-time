@@ -1,8 +1,9 @@
 <template>
-  <tv-relative-time
-    :date="date"
+  <TvRelativeTime
+    :date="'2022-09-10T12:00:00Z'"
+    lang="es"
     show-full-date
-  ></tv-relative-time>
+  ></TvRelativeTime>
 </template>
 
 <script setup>
@@ -10,5 +11,5 @@ import { ref } from 'vue'
 
 import TvRelativeTime from "@todovue/tv-relative-time";
 
-const date = ref('2027-09-15T00:00:00Z')
+const date = ref('2022-09-10T12:00:00Z')
 </script>

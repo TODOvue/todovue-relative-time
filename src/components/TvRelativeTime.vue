@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import useRelativeTime from '../composable/useRelativeTime.js'
 
 const props = defineProps({
@@ -18,16 +18,20 @@ const props = defineProps({
   showFullDate: {
     type: Boolean,
     default: false
+  },
+  lang: {
+    type: String,
+    default: 'en'
   }
 })
 
-const { getRelativeTime } = useRelativeTime()
+const { getRelativeTime } = useRelativeTime(props.lang)
 const timeInfo = ref({ text: '-', tooltip: 'Fecha no disponible' })
 let intervalId = null
 
 const updateTime = () => {
   if (!props.date) return
-  timeInfo.value = getRelativeTime(props.date, false, props.compact)
+  timeInfo.value = getRelativeTime(props.date, false, props.compact, props.lang)
 }
 
 const displayText = computed(() => {
@@ -44,6 +48,11 @@ onMounted(() => {
 onBeforeUnmount(() => {
   clearInterval(intervalId)
 })
+
+watch(() => props.date, updateTime)
+watch(() => props.lang, updateTime)
+watch(() => props.compact, updateTime)
+watch(() => props.showFullDate, updateTime)
 </script>
 
 <template>

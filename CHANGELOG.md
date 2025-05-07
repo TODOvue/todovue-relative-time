@@ -1,10 +1,19 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to `@todovue/tv-relative-time` will be documented in this file.
 
-This project adheres to [Semantic Versioning](https://semver.org).
+This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
+## [1.1.0] - 2025-05-06
+
+### ✨ Features
+- Added localization support for relative time formatting (`es`, `fr`, `pt`, and `en` as default)
+
+### 🐛 Fixed
+- Fixed date formatting issues by enforcing the UTC timezone
+- Watched `date` and other props to ensure reactivity
+- Updated package references and improved documentation consistency
 
 ## [1.0.0] - 2025-05-05
 
@@ -24,4 +33,5 @@ This project adheres to [Semantic Versioning](https://semver.org).
 
 ---
 
-[1.0.0]: https://github.com/TODOvue/todovue-relative-time/pull/1/files
+[1.1.0]: https://github.com/TODOvue/tv-relative-time/pull/2/files
+[1.0.0]: https://github.com/TODOvue/tv-relative-time/pull/1/files
