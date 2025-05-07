@@ -1,10 +1,15 @@
-const useRelativeTime = () => {
+import relativeTimeLocales from '../locales/relativeTime.js'
+
+const useRelativeTime = (lang = 'en') => {
+  const t = relativeTimeLocales[lang] || relativeTimeLocales.en
+  
   const getRelativeTime = (dateString, isTableQuantity = false, compact = false) => {
-    if (!dateString) return { text: isTableQuantity ? '-' : 'Sin fecha', tooltip: '' }
+    if (!dateString) return { text: isTableQuantity ? '-' : t.noDate, tooltip: '' }
     
     const date = new Date(dateString)
     const now = new Date()
-    const fullDate = new Intl.DateTimeFormat('es-CO', {
+    
+    const fullDate = new Intl.DateTimeFormat(lang === 'es' ? 'es-CO' : 'en-US', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
@@ -16,7 +21,26 @@ const useRelativeTime = () => {
     const sameDay = date.toDateString() === now.toDateString()
     
     const getDayName = (d) =>
-      new Intl.DateTimeFormat('es-CO', { weekday: 'long' }).format(d)
+      new Intl.DateTimeFormat(lang === 'es' ? 'es-CO' : 'en-US', { weekday: 'long' }).format(d)
+    
+    const formatUnit = (val, unit) => {
+      const word = val === 1 ? t[unit] : t[unit + 's']
+      return `${val} ${word}`
+    }
+    
+    const formatCompact = (val, unit) => {
+      const map = { [t.minute]: 'm', [t.hour]: 'h', [t.day]: 'd', [t.week]: 'w', [t.month]: 'mo', [t.year]: 'y' }
+      return `${val}${map[unit] || ''}`
+    }
+    
+    const formatDetail = ({ years, months, weeks, days }) => {
+      const parts = []
+      if (years) parts.push(formatUnit(years, 'year'))
+      if (months) parts.push(formatUnit(months, 'month'))
+      if (weeks) parts.push(formatUnit(weeks, 'week'))
+      if (days) parts.push(formatUnit(days, 'day'))
+      return parts.slice(0, 2).join(', ')
+    }
     
     const getDetailedBreakdown = (start, end) => {
       let remainingDays = Math.floor((end - start) / 86400000)
@@ -29,44 +53,11 @@ const useRelativeTime = () => {
       return { years, months, weeks, days }
     }
     
-    const formatDetail = ({ years, months, weeks, days }) => {
-      const parts = []
-      if (years) parts.push(`${years} ${years === 1 ? 'año' : 'años'}`)
-      if (months) parts.push(`${months} ${months === 1 ? 'mes' : 'meses'}`)
-      if (weeks) parts.push(`${weeks} ${weeks === 1 ? 'semana' : 'semanas'}`)
-      if (days) parts.push(`${days} ${days === 1 ? 'día' : 'días'}`)
-      return parts.slice(0, 2).join(', ')
-    }
-    
-    const formatCompact = (value, unit) => {
-      const timeUnits = {
-        minuto: 'm',
-        hora: 'h',
-        dia: 'd',
-        semana: 'w',
-        mes: 'mo',
-        anio: 'a'
-      }
-      return `${value}${timeUnits[unit] || ''}`
-    }
-    
-    const getCompact = (value, unitSingular) => {
-      const key = {
-        minuto: 'minuto',
-        hora: 'hora',
-        dia: 'dia',
-        semana: 'semana',
-        mes: 'mes',
-        anio: 'anio'
-      }[unitSingular]
-      return formatCompact(value, key)
-    }
-    
     if (sameDay) {
       const absSeconds = Math.abs(diffInSeconds)
       if (absSeconds < 60) {
         return {
-          text: compact ? 'ahora' : diffInSeconds > 0 ? 'En un momento' : 'Hace un momento',
+          text: compact ? t.now : diffInSeconds > 0 ? t.inAMoment : t.now,
           tooltip: fullDate
         }
       }
@@ -75,75 +66,74 @@ const useRelativeTime = () => {
         const minutes = Math.floor(absSeconds / 60)
         return {
           text: compact
-            ? getCompact(minutes, 'minuto')
+            ? formatCompact(minutes, t.minute)
             : diffInSeconds > 0
-              ? `En ${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`
-              : `Hace ${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`,
+              ? `${t.in} ${formatUnit(minutes, 'minute')}`
+              : `${t.ago} ${formatUnit(minutes, 'minute')}`,
           tooltip: fullDate
         }
       }
       
-      if (absSeconds < 86400) {
-        const hours = Math.floor(absSeconds / 3600)
-        return {
-          text: compact
-            ? getCompact(hours, 'hora')
-            : diffInSeconds > 0
-              ? `En ${hours} ${hours === 1 ? 'hora' : 'horas'}`
-              : `Hace ${hours} ${hours === 1 ? 'hora' : 'horas'}`,
-          tooltip: fullDate
-        }
+      const hours = Math.floor(absSeconds / 3600)
+      return {
+        text: compact
+          ? formatCompact(hours, t.hour)
+          : diffInSeconds > 0
+            ? `${t.in} ${formatUnit(hours, 'hour')}`
+            : `${t.ago} ${formatUnit(hours, 'hour')}`,
+        tooltip: fullDate
       }
-      
-      return { text: 'Hoy', tooltip: fullDate }
     }
     
     if (diffInSeconds > 0) {
-      if (diffInDays === 1) return { text: compact ? '1d' : 'Mañana', tooltip: fullDate }
-      if (diffInDays === 2) return { text: compact ? '2d' : 'Pasado mañana', tooltip: fullDate }
+      if (diffInDays === 1) return { text: compact ? '1d' : t.tomorrow, tooltip: fullDate }
+      if (diffInDays === 2) return { text: compact ? '2d' : `${t.in} 2 ${t.days}`, tooltip: fullDate }
       
-      const nowDay = now.getDay()
-      const dateDay = date.getDay()
-      if (diffInDays < 7 && dateDay > nowDay)
-        return { text: compact ? `${diffInDays}d` : `Este ${getDayName(date)}`, tooltip: fullDate }
+      if (diffInDays < 7)
+        return { text: compact ? `${diffInDays}d` : `${t.next} ${getDayName(date)}`, tooltip: fullDate }
       
-      if (diffInDays < 14) return { text: compact ? '1w' : 'La próxima semana', tooltip: fullDate }
-      if (diffInDays < 60)
+      if (diffInDays < 14) return { text: compact ? '1w' : t.nextWeek, tooltip: fullDate }
+      
+      if (diffInDays < 60) {
+        const weeks = Math.round(diffInDays / 7)
         return {
-          text: compact ? `${Math.round(diffInDays / 7)}w` : `En ${Math.round(diffInDays / 7)} semanas`,
+          text: compact ? `${weeks}w` : `${t.in} ${formatUnit(weeks, 'week')}`,
           tooltip: fullDate
         }
+      }
       
       const detail = getDetailedBreakdown(now, date)
       return {
         text: compact
-          ? getCompact(detail.years || detail.months, detail.years ? 'anio' : 'mes')
-          : `En ${formatDetail(detail)}`,
+          ? formatCompact(detail.years || detail.months, detail.years ? t.year : t.month)
+          : `${t.in} ${formatDetail(detail)}`,
         tooltip: fullDate
       }
     } else {
       const absDays = Math.abs(diffInDays)
-      if (absDays === 1) return { text: compact ? '1d' : 'Ayer', tooltip: fullDate }
-      if (absDays === 2) return { text: compact ? '2d' : 'Antes de ayer', tooltip: fullDate }
+      if (absDays === 1) return { text: compact ? '1d' : t.yesterday, tooltip: fullDate }
       
-      const nowDay = now.getDay()
-      const dateDay = date.getDay()
-      if (absDays < 7 && dateDay < nowDay)
-        return { text: compact ? `${absDays}d` : `El ${getDayName(date)} pasado`, tooltip: fullDate }
+      if (absDays === 2) return { text: compact ? '2d' : `${t.ago} 2 ${t.days}`, tooltip: fullDate }
+      
+      if (absDays < 7)
+        return { text: compact ? `${absDays}d` : `${t.past} ${getDayName(date)}`, tooltip: fullDate }
       
       if (absDays < 14)
-        return { text: compact ? '1w' : 'La semana pasada', tooltip: fullDate }
-      if (absDays < 60)
+        return { text: compact ? '1w' : t.lastWeek, tooltip: fullDate }
+      
+      if (absDays < 60) {
+        const weeks = Math.round(absDays / 7)
         return {
-          text: compact ? `${Math.round(absDays / 7)}w` : `Hace ${Math.round(absDays / 7)} semanas`,
+          text: compact ? `${weeks}w` : `${t.ago} ${formatUnit(weeks, 'week')}`,
           tooltip: fullDate
         }
+      }
       
       const detail = getDetailedBreakdown(date, now)
       return {
         text: compact
-          ? getCompact(detail.years || detail.months, detail.years ? 'anio' : 'mes')
-          : `Hace ${formatDetail(detail)}`,
+          ? formatCompact(detail.years || detail.months, detail.years ? t.year : t.month)
+          : `${t.ago} ${formatDetail(detail)}`,
         tooltip: fullDate
       }
     }

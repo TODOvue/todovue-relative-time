@@ -18,10 +18,14 @@ const props = defineProps({
   showFullDate: {
     type: Boolean,
     default: false
+  },
+  lang: {
+    type: String,
+    default: 'en'
   }
 })
 
-const { getRelativeTime } = useRelativeTime()
+const { getRelativeTime } = useRelativeTime(props.lang)
 const timeInfo = ref({ text: '-', tooltip: 'Fecha no disponible' })
 let intervalId = null
 
